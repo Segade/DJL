@@ -168,4 +168,35 @@ public class ObjectFunctionality {
     } // end calculate horizontal position
 
 
+
+    public static int calculateOverlapArea(Box box1, Box box2){
+        // Calculate the coordinates of the overlapping region
+        int overlapX = Math.max(box1.x, box2.x);
+        int overlapY = Math.max(box1.y, box2.y);
+
+        // Calculate the dimensions of the overlapping region
+        int overlapWidth = Math.min(box1.x + box1.width, box2.x + box2.width) - overlapX;
+        int overlapHeight = Math.min(box1.y + box1.height, box2.y + box2.height) - overlapY;
+
+        // Check for non-overlapping rectangles
+        if (overlapWidth <= 0 || overlapHeight <= 0) {
+            return 0;  // No overlap
+        }
+
+        // Calculate overlap area
+        return overlapWidth * overlapHeight;
+    } // end calculate overlap area
+
+
+    public static int calculatePercentageOfArea(int boxArea, int overlapArea){
+        return  (overlapArea*100)/boxArea;
+    } // end calculate percentage of area
+
+    public static  int calculateOverlapArea2(Box box1, Box box2){
+        int overlapX = Math.max(0, Math.min(box1.x + box1.width, box2.x + box2.width) - Math.max(box1.x, box2.x));
+        int overlapY = Math.max(0, Math.min(box1.y + box1.height, box2.y + box2.height) - Math.max(box1.y, box2.y));
+
+        return overlapX * overlapY;
+    } // end calculate overlap area
+
 } // end class
