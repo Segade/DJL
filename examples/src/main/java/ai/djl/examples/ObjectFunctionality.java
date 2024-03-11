@@ -91,7 +91,7 @@ public class ObjectFunctionality {
         int small = (int) (imageWidth * SMALLSIZE);
         //the pixel value for the calculation of the medium size range
         int medium = (int) (imageWidth * MEDIUMSIZE);
-         String result = "";
+        String result = "";
 
         // if statement that calculates small, medium and large size
         if (objectWidth <= small)
@@ -168,15 +168,14 @@ public class ObjectFunctionality {
     } // end calculate horizontal position
 
 
-
-    public static int calculateOverlapArea(Box box1, Box box2){
+    public static int calculateOverlapArea(ObjectDetected box1, ObjectDetected box2) {
         // Calculate the coordinates of the overlapping region
-        int overlapX = Math.max(box1.x, box2.x);
-        int overlapY = Math.max(box1.y, box2.y);
+        int overlapX = Math.max(box1.getPositionX(), box2.getPositionX());
+        int overlapY = Math.max(box1.getPositionY(), box2.getPositionY());
 
         // Calculate the dimensions of the overlapping region
-        int overlapWidth = Math.min(box1.x + box1.width, box2.x + box2.width) - overlapX;
-        int overlapHeight = Math.min(box1.y + box1.height, box2.y + box2.height) - overlapY;
+        int overlapWidth = Math.min(box1.getPositionX() + box1.getWidth(), box2.getPositionX() + box2.getWidth()) - overlapX;
+        int overlapHeight = Math.min(box1.getPositionY() + box1.getHeight(), box2.getPositionY() + box2.getHeight()) - overlapY;
 
         // Check for non-overlapping rectangles
         if (overlapWidth <= 0 || overlapHeight <= 0) {
@@ -188,15 +187,9 @@ public class ObjectFunctionality {
     } // end calculate overlap area
 
 
-    public static int calculatePercentageOfArea(int boxArea, int overlapArea){
-        return  (overlapArea*100)/boxArea;
+    public static int calculatePercentageOfArea(int boxArea, int overlapArea) {
+        return (overlapArea * 100) / boxArea;
     } // end calculate percentage of area
 
-    public static  int calculateOverlapArea2(Box box1, Box box2){
-        int overlapX = Math.max(0, Math.min(box1.x + box1.width, box2.x + box2.width) - Math.max(box1.x, box2.x));
-        int overlapY = Math.max(0, Math.min(box1.y + box1.height, box2.y + box2.height) - Math.max(box1.y, box2.y));
-
-        return overlapX * overlapY;
-    } // end calculate overlap area
 
 } // end class

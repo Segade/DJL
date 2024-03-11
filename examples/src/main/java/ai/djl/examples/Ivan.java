@@ -10,7 +10,7 @@ public class Ivan {
         Box box2 = new Box("bicycle", 162, 207, 594, 588);
         Box box3 = new Box("car", 611, 137, 293, 160);
 int result;
-
+/*
 result = ObjectFunctionality.calculateOverlapArea(box1, box2);
         if (result > 0 ) {
              System.out.println("dog and bicycle " + result +
@@ -31,6 +31,8 @@ result = ObjectFunctionality.calculateOverlapArea(box1, box2);
                     "\nThe bicycle is overlapping by " + ObjectFunctionality.calculatePercentageOfArea(box2.width * box2.height, result) +
                     "\nThe car is overlapping by " + ObjectFunctionality.calculatePercentageOfArea(box3.width * box3.height, result));
 
+
+ */
 
     } // end main
 

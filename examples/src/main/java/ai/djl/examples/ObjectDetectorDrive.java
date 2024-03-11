@@ -77,7 +77,25 @@ public class ObjectDetectorDrive {
         // loop that iterates the ArrayList and
         // displays the description of each object
         for (ObjectDetected od : listOfObjects)
-            System.out.print("\nName: " + od.getName() + "\nDescription: " + od.getDescription());
+            System.out.println("\nName: " + od.getName() + "\nDescription: " + od.getDescription());
+
+        System.out.println();
+        for (int x = 0; x < listOfObjects.size() - 1; x++) {
+            for (int y = x + 1; y < listOfObjects.size(); y++) {
+                int result = ObjectFunctionality.calculateOverlapArea(listOfObjects.get(x), listOfObjects.get(y));
+                if (result > 0) {
+                    System.out.println("The " + listOfObjects.get(x).getName() + " is overlapping by " +
+                            listOfObjects.get(y).getName() + ObjectFunctionality.calculatePercentageOfArea((listOfObjects.get(x).getWidth() * listOfObjects.get(x).getHeight()), result)
+                            + "%");
+
+                    System.out.println("The " + listOfObjects.get(y).getName() + " is overlapping by " +
+                            listOfObjects.get(x).getName() + ObjectFunctionality.calculatePercentageOfArea((listOfObjects.get(y).getWidth() * listOfObjects.get(y).getHeight()), result)
+                            + "%");
+
+                } // end if
+            } // end for y
+
+        } // end for x
 
     } // end main
 
