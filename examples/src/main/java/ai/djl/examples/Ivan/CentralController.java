@@ -1,10 +1,5 @@
-/**
- * Class that executes the code that displays the description of an image
- * Author: Ivan Segade Carou
- */
-
 package ai.djl.examples.Ivan;
-// import the necesssary libraries for the class
+
 
 import ai.djl.ModelException;
 
@@ -16,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,31 +19,70 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ObjectDetectorDrive {
+
+public class CentralController {
+    // declaration the MyVoice class used
+    //MyVoice myVoice;
+    CentralView centralView;
+    List<ObjectDetected> listOfObjects = new ArrayList<ObjectDetected>();
+
+
     /**
-     * method that is executed when the program is run
-     *
-     * @param args
-     * @throws IOException
-     * @throws ModelException
-     * @throws TranslateException
+     * Constructor of the controller
      */
-    public static void main(String[] args) throws IOException, ModelException, TranslateException {
-        // It declares the variable that stores the path to the image
-        Path imageFile = Paths.get("examples/src/test/resources/dog_bike_car.jpg");
-        // It creates an image class to be able to work with it
-        Image img = ImageFactory.getInstance().fromFile(imageFile);
+    CentralController() {
+        // call to the method that instantiates the view class
+        display();
+    } // end constructor
 
-        // it declares a DetectedObjects variable
-        // the predict method returns the data that is used to generate the description
-        DetectedObjects detection = ObjectDetector.predict(img);
+    public void display() {
+        //It instantiates the MyVoice class
+//        MyVoice myVoice = MyVoice.getInstance();
 
-        // it declares a variable that stores the data of each object
-        List<ObjectDetected> listOfObjects = new ArrayList<ObjectDetected>();
+        // It calls out the presentation message of the program
+//        myVoice.speak("Welcome to the central application");
 
+        // It instantiates the interface
+         centralView = new CentralView(this);
+        centralView.display();
+    } // end display
+
+
+    /**
+     * public method that calls the unique MyVoice class
+     * and calls the speak method to call out the text passed as paramter
+     *
+     * @param textToSpeech
+     */
+    public void speak(String textToSpeech) {
+//        myVoice = MyVoice.getInstance();
+//        myVoice.speak(textToSpeech);
+
+    } // end of speak
+
+
+    public void loadImage(String imagePath) throws  ModelException, TranslateException, IOException{
+try {
+    Path imageFile = Paths.get(imagePath.trim() );
+
+    Image img = ImageFactory.getInstance().fromFile(imageFile);
+    String description = getDescription(img);
+    System.out.println("Secaiv\n" + description);
+    description = getOverlap();
+    System.out.println("\n" + description);
+    //JOptionPane.showMessageDialog(null, description, "Result", JOptionPane.INFORMATION_MESSAGE);
+} catch (IOException ioe)
+{System.out.println((ioe));}
+
+    }  // end load image
+
+
+    private String getDescription(Image img) throws IOException, ModelException, TranslateException{
         // the height and width of the image in pixels
         int height = img.getHeight();
         int width = img.getWidth();
+
+        DetectedObjects detection = ObjectDetector.predict(img);
 
         // loop that iterates the list of detected objects
         // and calls the createObject that converts the prediction into JSON objects
@@ -61,14 +96,21 @@ public class ObjectDetectorDrive {
             objectDetected.setDescription(description);
             listOfObjects.add(objectDetected);
         }// end for
-        System.out.print("\nthe height is " + height + "\nthe width is " + width);
 
         // loop that iterates the ArrayList and
         // displays the description of each object
+         String description = "";
         for (ObjectDetected od : listOfObjects)
-            System.out.println("\nName: " + od.getName() + "\nDescription: " + od.getDescription());
-// insert a blank line between the two sections
-        System.out.println();
+            description += "\nName: " + od.getName() + "\nDescription: " + od.getDescription();
+
+        return description;
+    } // end get description
+
+
+
+    private String getOverlap(){
+    String overlap = "";
+
 
         //Loop for the reference object
         for (int x = 0; x < listOfObjects.size() - 1; x++) {
@@ -80,25 +122,22 @@ public class ObjectDetectorDrive {
                 // if the area is bigger than zero means there is common area
                 if (result > 0) {
                     // It displays the percentage of the reference object  covered by the new one
-                    System.out.println("The " + listOfObjects.get(x).getName() + " is overlapping by " +
+                    overlap += "\nThe " + listOfObjects.get(x).getName() + " is overlapping by " +
                             listOfObjects.get(y).getName() + ObjectFunctionality.calculatePercentageOfArea((listOfObjects.get(x).getWidth() * listOfObjects.get(x).getHeight()), result)
-                            + "%");
+                            + "%";
 
                     // It displays the percentage of the new object covered by the reference object
-                    System.out.println("The " + listOfObjects.get(y).getName() + " is overlapping by " +
+                     overlap += "\nThe " + listOfObjects.get(y).getName() + " is overlapping by " +
                             listOfObjects.get(x).getName() + ObjectFunctionality.calculatePercentageOfArea((listOfObjects.get(y).getWidth() * listOfObjects.get(y).getHeight()), result)
-                            + "%");
+                            + "%";
 
                 } // end if
             } // end for y
 
         } // end for x
 
-        //CentralController c = new CentralController();
-        //c.display();
-
-    } // end main
-
+        return overlap;
+    } // end get overlap
 
     /**
      * method that receives the result of the prediction in String format
@@ -200,4 +239,6 @@ public class ObjectDetectorDrive {
     } // end fetch decimals
 
 
-} // end class
+
+
+} // end of class
