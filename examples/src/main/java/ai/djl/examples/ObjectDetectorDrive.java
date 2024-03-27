@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import ai.djl.Application;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
+import ai.djl.examples.Ivan.CentralController;
 import ai.djl.examples.inference.ObjectDetection;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
@@ -25,6 +26,8 @@ import ai.djl.translate.TranslateException;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.ibm.icu.impl.UResource;
+import org.checkerframework.checker.optional.qual.Present;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +100,9 @@ public class ObjectDetectorDrive {
 
         } // end for x
 
+
+String description = CentralPointsAlgorithm.calculateDepth(listOfObjects);
+System.out.println("Central Points \n" + description);
     } // end main
 
 

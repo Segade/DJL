@@ -19,19 +19,23 @@ import java.io.IOException;
 
 
 @SuppressWarnings("serial")
-public class CentralView extends JFrame implements ActionListener, FocusListener, KeyListener {
+        public class CentralView extends JFrame implements ActionListener, FocusListener, KeyListener {
     // declare the controller and the GUI components
     CentralController controller;
     JFrame centralFrame;
 
     JPanel centerPanel;
+    JPanel buttonsPanel = new JPanel(new FlowLayout());
+
 
     JButton speakButton;
+    JButton descriptionButton;
+    JButton overlappingButton;
+    JButton depthOverlapButton;
+    JButton depthCentralPointButton;
     JTextField textToSpeechField;
 
     KeyListener keyListener;
-    private boolean stop = false;
-
 
     /**
      * constructor of the class that receives the controller as a parameter to access its methods
@@ -86,15 +90,39 @@ public class CentralView extends JFrame implements ActionListener, FocusListener
         centralFrame.setLayout(new BorderLayout(2, 2));
 
         // the frame can get the focus
-        centralFrame.setFocusable(true);
+        //centralFrame.setFocusable(true);
 
 // declare the panel and add the button and the textbox
         centerPanel = new JPanel(new GridLayout(1, 1));
         textToSpeechField = new JTextField(30);
-        speakButton = new JButton("Speak");
+        speakButton = new JButton("Load");
+        descriptionButton = new JButton("Description");
+        overlappingButton = new JButton("Overlapping");
+        depthOverlapButton = new JButton("Depth by overlapping");
+        depthCentralPointButton = new JButton("Depth by Central Point");
 
     } // end set frame
 
+
+    /**
+     * method that add the GUI components to the frame
+     */
+
+    private void addFrame() {
+
+        centerPanel.add(textToSpeechField);
+        centerPanel.add(speakButton);
+
+        buttonsPanel.add(descriptionButton);
+        buttonsPanel.add(overlappingButton);
+        buttonsPanel.add(depthOverlapButton);
+        buttonsPanel.add(depthCentralPointButton);
+
+        centralFrame.add(centerPanel, BorderLayout.CENTER);
+centralFrame.add(buttonsPanel, BorderLayout.SOUTH);
+buttonsPanel.setVisible(false);
+speakButton.requestFocus();
+    } // end add frame
 
     /**
      * method that adds the action, focus and key listeners to the GUI components
@@ -103,6 +131,10 @@ public class CentralView extends JFrame implements ActionListener, FocusListener
     private void addListeners() {
         speakButton.addFocusListener(this);
         speakButton.addActionListener(this);
+        descriptionButton.addActionListener(this);
+        overlappingButton.addActionListener(this);
+        depthOverlapButton.addActionListener(this);
+        depthCentralPointButton.addActionListener(this);
         textToSpeechField.addFocusListener(this);
 
         addFrameListener();
@@ -131,12 +163,6 @@ public class CentralView extends JFrame implements ActionListener, FocusListener
                 // with the code, I get the text associated to the corresponding key
                 String keyPressed = KeyEvent.getKeyText(keyCode);
 
-
-                if (keyPressed.equals("Ctrl")) {
-                    stop = true;
-
-                }
-
                 // call to the speak method in the controller to announce the text
                 controller.speak(keyPressed);
 
@@ -152,20 +178,6 @@ public class CentralView extends JFrame implements ActionListener, FocusListener
         centralFrame.addKeyListener(keyListener);
     } // end add frame listener
 
-    /**
-     * method that add the GUI components to the frame
-     */
-
-    private void addFrame() {
-
-        centerPanel.add(textToSpeechField);
-        centerPanel.add(speakButton);
-
-        centralFrame.add(centerPanel, BorderLayout.CENTER);
-
-
-    } // end add frame
-
 
     /**
      * method that declares the action listener
@@ -177,16 +189,29 @@ public class CentralView extends JFrame implements ActionListener, FocusListener
     public void actionPerformed(ActionEvent e) {
         // if the user pressed the button
         if (e.getSource() == speakButton) {
-try {
-    controller.loadImage(textToSpeechField.getText());
-} catch (IOException ioe)
-            { System.out.println(ioe);}
-catch (ModelException me)
-{System.out.println(me);}
-catch (TranslateException te)
-{System.out.println(te);}
+            try {
+                controller.loadImage(textToSpeechField.getText());
+            } catch (IOException ioe) {
+                System.out.println(ioe);
+            } catch (ModelException me) {
+                System.out.println(me);
+            } catch (TranslateException te) {
+                System.out.println(te);
+            }
+        } // end if speak button
+        else if (e.getSource() == descriptionButton) {
+controller.displayMessage("description");
 
         } // end if
+        else if (e.getSource() == overlappingButton) {
+controller.displayMessage("overlapping");
+        } // end if
+        else if (e.getSource() == depthOverlapButton) {
+controller.displayMessage("depthOverlap");
+        } // end if
+        else if(e.getSource() == depthCentralPointButton){
+controller.displayMessage("depthCentralPoint");
+        } // end if which button pressed
     }// end action perform
 
     /**

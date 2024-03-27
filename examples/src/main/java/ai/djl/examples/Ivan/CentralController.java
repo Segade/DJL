@@ -22,17 +22,19 @@ import java.util.List;
 
 public class CentralController {
     // declaration the MyVoice class used
-    //MyVoice myVoice;
+     MyVoice myVoice;
     CentralView centralView;
     List<ObjectDetected> listOfObjects = new ArrayList<ObjectDetected>();
-
+String description = "No information available";
+String overlapping = "No information available";
+String depthOverlap = "No information available";
+String depthCentralPoint = "No information available";
 
     /**
      * Constructor of the controller
      */
     CentralController() {
-        // call to the method that instantiates the view class
-        display();
+
     } // end constructor
 
     public void display() {
@@ -40,7 +42,7 @@ public class CentralController {
 //        MyVoice myVoice = MyVoice.getInstance();
 
         // It calls out the presentation message of the program
-//        myVoice.speak("Welcome to the central application");
+         //myVoice.speak("Welcome to the central application");
 
         // It instantiates the interface
          centralView = new CentralView(this);
@@ -66,15 +68,40 @@ try {
     Path imageFile = Paths.get(imagePath.trim() );
 
     Image img = ImageFactory.getInstance().fromFile(imageFile);
-    String description = getDescription(img);
+     description = getDescription(img);
     System.out.println("Secaiv\n" + description);
-    description = getOverlap();
+    overlapping = OverlappingAlgorithm.getOverlap(listOfObjects);
     System.out.println("\n" + description);
-    //JOptionPane.showMessageDialog(null, description, "Result", JOptionPane.INFORMATION_MESSAGE);
+
+    depthCentralPoint = CentralPointsAlgorithm.calculateDepth(listOfObjects);
+
+displayMessage("description");
+centralView.buttonsPanel.setVisible(true);
 } catch (IOException ioe)
 {System.out.println((ioe));}
 
     }  // end load image
+
+    public void displayMessage(String option){
+
+        switch (option){
+            case "description":
+                JOptionPane.showMessageDialog(null, description,"Description", JOptionPane.INFORMATION_MESSAGE);
+            break;
+
+            case "overlapping":
+                JOptionPane.showMessageDialog(null, overlapping, "Overlapping", JOptionPane.INFORMATION_MESSAGE);
+                break;
+
+            case "depthOverlap":
+                JOptionPane.showMessageDialog(null, depthOverlap, "Depth by overlapping", JOptionPane.INFORMATION_MESSAGE);
+                break;
+
+                case "depthCentralPoint":
+                    JOptionPane.showMessageDialog(null, depthCentralPoint, "Depth by Central Point", JOptionPane.INFORMATION_MESSAGE);
+        } // end switch
+
+    } // end display message
 
 
     private String getDescription(Image img) throws IOException, ModelException, TranslateException{
@@ -108,36 +135,7 @@ try {
 
 
 
-    private String getOverlap(){
-    String overlap = "";
 
-
-        //Loop for the reference object
-        for (int x = 0; x < listOfObjects.size() - 1; x++) {
-            // loop that compares the reference object to the rest of objects
-            for (int y = x + 1; y < listOfObjects.size(); y++) {
-                // It stores the value of the common area
-                int result = ObjectFunctionality.calculateOverlapArea(listOfObjects.get(x), listOfObjects.get(y));
-
-                // if the area is bigger than zero means there is common area
-                if (result > 0) {
-                    // It displays the percentage of the reference object  covered by the new one
-                    overlap += "\nThe " + listOfObjects.get(x).getName() + " is overlapping by " +
-                            listOfObjects.get(y).getName() + ObjectFunctionality.calculatePercentageOfArea((listOfObjects.get(x).getWidth() * listOfObjects.get(x).getHeight()), result)
-                            + "%";
-
-                    // It displays the percentage of the new object covered by the reference object
-                     overlap += "\nThe " + listOfObjects.get(y).getName() + " is overlapping by " +
-                            listOfObjects.get(x).getName() + ObjectFunctionality.calculatePercentageOfArea((listOfObjects.get(y).getWidth() * listOfObjects.get(y).getHeight()), result)
-                            + "%";
-
-                } // end if
-            } // end for y
-
-        } // end for x
-
-        return overlap;
-    } // end get overlap
 
     /**
      * method that receives the result of the prediction in String format

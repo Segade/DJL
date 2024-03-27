@@ -8,6 +8,7 @@ package ai.djl.examples;
 //import com.google.gson.JsonObject;
 //import com.google.gson.JsonParser;
 
+
 public class ObjectDetected {
     private String name;
     private int height;
@@ -88,5 +89,12 @@ public class ObjectDetected {
                 ", positionY=" + positionY +
                 ", description='" + description + '\'' +
                 '}';
-    }
+    } // end to string
+
+    public int[] getCentralPoint(){
+int centerX = positionX + width / 2;
+int centerY = positionY + height / 2;
+
+        return new int[] {centerX, centerY};
+    } // end calculate centrl point
 } // end class

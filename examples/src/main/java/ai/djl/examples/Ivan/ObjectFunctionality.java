@@ -180,23 +180,7 @@ public class ObjectFunctionality {
      * @return
      */
 
-    public static int calculateOverlapArea(ObjectDetected box1, ObjectDetected box2) {
-        // Calculate the coordinates of the overlapping region
-        int overlapX = Math.max(box1.getPositionX(), box2.getPositionX());
-        int overlapY = Math.max(box1.getPositionY(), box2.getPositionY());
 
-        // Calculate the dimensions of the overlapping region
-        int overlapWidth = Math.min(box1.getPositionX() + box1.getWidth(), box2.getPositionX() + box2.getWidth()) - overlapX;
-        int overlapHeight = Math.min(box1.getPositionY() + box1.getHeight(), box2.getPositionY() + box2.getHeight()) - overlapY;
-
-        // Check for non-overlapping rectangles
-        if (overlapWidth <= 0 || overlapHeight <= 0) {
-            return 0;  // No overlap
-        }
-
-        // Calculate overlap area
-        return overlapWidth * overlapHeight;
-    } // end calculate overlap area
 
 
     /**
@@ -208,9 +192,6 @@ public class ObjectFunctionality {
      * @return
      */
 
-    public static int calculatePercentageOfArea(int boxArea, int overlapArea) {
-        return (overlapArea * 100) / boxArea;
-    } // end calculate percentage of area
 
 
 } // end class

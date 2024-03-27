@@ -88,5 +88,13 @@ public class ObjectDetected {
                 ", positionY=" + positionY +
                 ", description='" + description + '\'' +
                 '}';
-    }
+    } // end to string
+
+    public int[] getCentralPoint(){
+        int centerX = positionX + width / 2;
+        int centerY = positionY + height / 2;
+
+        return new int[] {centerX, centerY};
+    } // end get central point
+
 } // end class
