@@ -5,9 +5,16 @@ import java.util.List;
 
 public class OverlappingAlgorithm {
 
+    /**
+     * This method iterates the lis of objects and displays the percentage of the common overlapping area between two objects
+     * It receives the list of objects as a List
+     * It returns a String with the final result
+     * @param listOfObjects
+     * @return
+     */
+
     public static String getOverlap(List<ObjectDetected> listOfObjects){
         String overlap = "";
-
 
         //Loop for the reference object
         for (int x = 0; x < listOfObjects.size() - 1; x++) {
@@ -60,5 +67,44 @@ public class OverlappingAlgorithm {
     private static int calculatePercentageOfArea(int boxArea, int overlapArea) {
         return (overlapArea * 100) / boxArea;
     } // end calculate percentage of area
+
+
+    private static String calculateLikelyhood(String name1, String name2, int percentage){
+         if (percentage == 100)
+             return"\nThe " + name1 + " is in 100% in front of the " + name2 ;
+        else if (percentage >= 90)
+            return"\nit is more than likely that the " + name1 + " is in front of the " + name2;
+        else if (percentage > 75)
+            return "\nIt is likely that the " + name1 + " is in front of the " + name2;
+
+
+        return "";
+    } // end calculate likelyhood
+
+    public static String calculateDepth(List<ObjectDetected> listOfObjects) {
+        String depth = "";
+
+        for (int x = 0; x < listOfObjects.size() - 1; x++) {
+        for (int y = x + 1; y < listOfObjects.size(); y++) {
+            // It stores the value of the common area
+            int result = calculateOverlapArea(listOfObjects.get(x), listOfObjects.get(y));
+
+            int percentage = calculatePercentageOfArea((listOfObjects.get(x).getWidth() * listOfObjects.get(x).getHeight()), result);
+
+    depth = calculateLikelyhood(listOfObjects.get(x).getName(), listOfObjects.get(y).getName(), percentage );
+
+percentage = calculatePercentageOfArea((listOfObjects.get(y).getWidth() * listOfObjects.get(y).getHeight()), result);
+
+                depth = calculateLikelyhood(listOfObjects.get(y).getName(), listOfObjects.get(x).getName(), percentage );
+
+
+        }// end for y
+    } // end for x
+
+        if (depth.equals(""))
+            depth = "No information is available";
+
+            return depth;
+    } // end calculate depth
 
 } // end class

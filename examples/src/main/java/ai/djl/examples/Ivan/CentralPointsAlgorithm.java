@@ -14,7 +14,7 @@ int pointY = centralPoints[1];
         int height = od.getHeight();
 
         // If the point is inside the bounding box, return 0
-        if (pointX >= boxX && pointX <= boxX + width && pointY >= boxY && pointY <= boxY + height)
+        if (pointX > boxX && pointX < boxX + width && pointY > boxY && pointY < boxY + height)
             return 0;
 
         int closestX = Math.max(boxX, Math.min(pointX, boxX + width));
@@ -41,6 +41,9 @@ result += "\nThe " + listOfObjects.get(x).getName() + " is in front of the " + l
 
             } // end for y
         } //end for x
+
+        if  (result.equals(""))
+            result = "No information is available";
 
                 return result;
     } // end calculate depth

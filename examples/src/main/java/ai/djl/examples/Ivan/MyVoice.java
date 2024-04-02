@@ -1,7 +1,3 @@
 package ai.djl.examples.Ivan;
-
-public class MyVoice{
-
-
-
-}
+  public class MyVoice{
+} // end class

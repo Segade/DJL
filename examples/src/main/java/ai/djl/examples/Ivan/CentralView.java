@@ -11,6 +11,7 @@ import ai.djl.ModelException;
 import ai.djl.translate.TranslateException;
 
 
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.awt.*;
@@ -33,6 +34,7 @@ import java.io.IOException;
     JButton overlappingButton;
     JButton depthOverlapButton;
     JButton depthCentralPointButton;
+    JButton depthBottomButton;
     JTextField textToSpeechField;
 
     KeyListener keyListener;
@@ -81,7 +83,7 @@ import java.io.IOException;
         centralFrame = new JFrame("Central application");
 
         // set the size of the window
-        centralFrame.setSize(500, 500);
+        centralFrame.setSize(700, 500);
 
         // close the window with the X button of the window
         centralFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,6 +102,7 @@ import java.io.IOException;
         overlappingButton = new JButton("Overlapping");
         depthOverlapButton = new JButton("Depth by overlapping");
         depthCentralPointButton = new JButton("Depth by Central Point");
+        depthBottomButton = new JButton("Depth by bottom");
 
     } // end set frame
 
@@ -117,6 +120,7 @@ import java.io.IOException;
         buttonsPanel.add(overlappingButton);
         buttonsPanel.add(depthOverlapButton);
         buttonsPanel.add(depthCentralPointButton);
+        buttonsPanel.add(depthBottomButton);
 
         centralFrame.add(centerPanel, BorderLayout.CENTER);
 centralFrame.add(buttonsPanel, BorderLayout.SOUTH);
@@ -135,6 +139,8 @@ speakButton.requestFocus();
         overlappingButton.addActionListener(this);
         depthOverlapButton.addActionListener(this);
         depthCentralPointButton.addActionListener(this);
+        depthBottomButton.addActionListener(this);
+
         textToSpeechField.addFocusListener(this);
 
         addFrameListener();
@@ -200,17 +206,20 @@ speakButton.requestFocus();
             }
         } // end if speak button
         else if (e.getSource() == descriptionButton) {
-controller.displayMessage("description");
+controller.displayMessage(Choice.DESCRIPTION);
 
         } // end if
         else if (e.getSource() == overlappingButton) {
-controller.displayMessage("overlapping");
+controller.displayMessage(Choice.OVERLAPPING);
         } // end if
         else if (e.getSource() == depthOverlapButton) {
-controller.displayMessage("depthOverlap");
+controller.displayMessage(Choice.DEPTHOVERLAP);
         } // end if
-        else if(e.getSource() == depthCentralPointButton){
-controller.displayMessage("depthCentralPoint");
+        else if(e.getSource() == depthCentralPointButton) {
+            controller.displayMessage(Choice.DEPTHCENTRALPOINT);
+        } // end if
+              else  if (e.getSource() == depthBottomButton){
+                  controller.displayMessage(Choice.DEPTHBOTTOM);
         } // end if which button pressed
     }// end action perform
 

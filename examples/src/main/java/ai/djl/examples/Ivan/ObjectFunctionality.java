@@ -110,7 +110,7 @@ public class ObjectFunctionality {
 
     /**
      * method that calculates the vertical position of the object in the image
-     * It receives the X coordinate of the object and the height of the image
+     * It receives the Y coordinate of the object and the height of the image
      * it returns the string with the description
      * it is private because non external classes can access it
      *
@@ -141,7 +141,7 @@ public class ObjectFunctionality {
 
     /**
      * method that calculates the horizontal position of the object in the image
-     * it receives the Y coordinates of the object and the width of the image
+     * it receives the X coordinates of the object and the width of the image
      * it returns the string with the description
      * it is private because non external classes can access it
      *

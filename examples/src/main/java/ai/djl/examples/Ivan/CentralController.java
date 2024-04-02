@@ -3,6 +3,7 @@ package ai.djl.examples.Ivan;
 
 import ai.djl.ModelException;
 
+import ai.djl.basicmodelzoo.tabular.TabNet;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
@@ -11,7 +12,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
+
+import javax.management.Descriptor;
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,32 +78,38 @@ try {
     overlapping = OverlappingAlgorithm.getOverlap(listOfObjects);
     System.out.println("\n" + description);
 
+    depthOverlap = OverlappingAlgorithm.calculateDepth(listOfObjects);
     depthCentralPoint = CentralPointsAlgorithm.calculateDepth(listOfObjects);
 
-displayMessage("description");
+displayMessage(Choice.DESCRIPTION);
 centralView.buttonsPanel.setVisible(true);
 } catch (IOException ioe)
 {System.out.println((ioe));}
 
     }  // end load image
 
-    public void displayMessage(String option){
+    public void displayMessage(Choice option){
 
         switch (option){
-            case "description":
+            case DESCRIPTION:
                 JOptionPane.showMessageDialog(null, description,"Description", JOptionPane.INFORMATION_MESSAGE);
             break;
 
-            case "overlapping":
+            case OVERLAPPING:
                 JOptionPane.showMessageDialog(null, overlapping, "Overlapping", JOptionPane.INFORMATION_MESSAGE);
                 break;
 
-            case "depthOverlap":
+            case DEPTHOVERLAP:
                 JOptionPane.showMessageDialog(null, depthOverlap, "Depth by overlapping", JOptionPane.INFORMATION_MESSAGE);
                 break;
 
-                case "depthCentralPoint":
+            case DEPTHCENTRALPOINT:
                     JOptionPane.showMessageDialog(null, depthCentralPoint, "Depth by Central Point", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+
+            case DEPTHBOTTOM:
+                    JOptionPane.showMessageDialog(null, DepthBottomAlgorithm.calculateDepth(listOfObjects), "Depth by the bottom", JOptionPane.INFORMATION_MESSAGE);
+
         } // end switch
 
     } // end display message
