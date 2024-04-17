@@ -170,27 +170,10 @@ public class ObjectFunctionality {
     } // end calculate horizontal position
 
 
-    /**
-     * Method that calculates the common area between two objects using the pixel values
-     * It receives two parameters. The two objects to check if there is overlapping between them
-     *It returns the numeric value of the common area
-     *
-     * @param box1
-     * @param box2
-     * @return
-     */
 
 
 
 
-    /**
-     * Method that calculate the percentage of the object area that is covered vy the common area with the other object
-     * It receives the object area value and the common area value
-     * It returns the numeric value of the object area that is overlapped
-     * @param boxArea
-     * @param overlapArea
-     * @return
-     */
 
 
 

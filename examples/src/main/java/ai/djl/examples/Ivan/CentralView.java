@@ -11,16 +11,15 @@ import ai.djl.ModelException;
 import ai.djl.translate.TranslateException;
 
 
-
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
 
 @SuppressWarnings("serial")
-        public class CentralView extends JFrame implements ActionListener, FocusListener, KeyListener {
+public class CentralView extends JFrame implements ActionListener, FocusListener, KeyListener {
     // declare the controller and the GUI components
     CentralController controller;
     JFrame centralFrame;
@@ -123,9 +122,9 @@ import java.io.IOException;
         buttonsPanel.add(depthBottomButton);
 
         centralFrame.add(centerPanel, BorderLayout.CENTER);
-centralFrame.add(buttonsPanel, BorderLayout.SOUTH);
-buttonsPanel.setVisible(false);
-speakButton.requestFocus();
+        centralFrame.add(buttonsPanel, BorderLayout.SOUTH);
+        buttonsPanel.setVisible(false);
+        speakButton.requestFocus();
     } // end add frame
 
     /**
@@ -193,8 +192,9 @@ speakButton.requestFocus();
      */
 
     public void actionPerformed(ActionEvent e) {
-        // if the user pressed the button
+        // if statement to know which button is pressed and call the corresponding method
         if (e.getSource() == speakButton) {
+            // try statement that handles the possible exceptions
             try {
                 controller.loadImage(textToSpeechField.getText());
             } catch (IOException ioe) {
@@ -206,20 +206,20 @@ speakButton.requestFocus();
             }
         } // end if speak button
         else if (e.getSource() == descriptionButton) {
-controller.displayMessage(Choice.DESCRIPTION);
+            controller.displayMessage(Choice.DESCRIPTION);
 
         } // end if
         else if (e.getSource() == overlappingButton) {
-controller.displayMessage(Choice.OVERLAPPING);
+            controller.displayMessage(Choice.OVERLAPPING);
         } // end if
         else if (e.getSource() == depthOverlapButton) {
-controller.displayMessage(Choice.DEPTHOVERLAP);
+            controller.displayMessage(Choice.DEPTHOVERLAP);
         } // end if
-        else if(e.getSource() == depthCentralPointButton) {
+        else if (e.getSource() == depthCentralPointButton) {
             controller.displayMessage(Choice.DEPTHCENTRALPOINT);
         } // end if
-              else  if (e.getSource() == depthBottomButton){
-                  controller.displayMessage(Choice.DEPTHBOTTOM);
+        else if (e.getSource() == depthBottomButton) {
+            controller.displayMessage(Choice.DEPTHBOTTOM);
         } // end if which button pressed
     }// end action perform
 

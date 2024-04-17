@@ -1,10 +1,10 @@
 package ai.djl.examples.Ivan;
-
-      enum Choice {
+// emum with the different options available in the interface
+enum Choice {
     DESCRIPTION,
     OVERLAPPING,
     DEPTHOVERLAP,
     DEPTHCENTRALPOINT,
-          DEPTHBOTTOM
+    DEPTHBOTTOM
 
 } // end enum

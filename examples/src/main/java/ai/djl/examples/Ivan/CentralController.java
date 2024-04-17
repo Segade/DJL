@@ -1,9 +1,10 @@
 package ai.djl.examples.Ivan;
-
+/**
+ * Class that instantiates the interface and handles all the methods and classes that the program needs
+ */
 
 import ai.djl.ModelException;
 
-import ai.djl.basicmodelzoo.tabular.TabNet;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
@@ -13,10 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 
-
-import javax.management.Descriptor;
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,16 +22,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class CentralController {
     // declaration the MyVoice class used
-     MyVoice myVoice;
+    MyVoice myVoice;
     CentralView centralView;
+    // declaration of the variables to work with the object detection process
     List<ObjectDetected> listOfObjects = new ArrayList<ObjectDetected>();
-String description = "No information available";
-String overlapping = "No information available";
-String depthOverlap = "No information available";
-String depthCentralPoint = "No information available";
+    String description = "No information available";
+    String overlapping = "No information available";
+    String depthOverlap = "No information available";
+    String depthCentralPoint = "No information available";
+    String depthBottom = "No information available";
 
     /**
      * Constructor of the controller
@@ -44,13 +43,13 @@ String depthCentralPoint = "No information available";
 
     public void display() {
         //It instantiates the MyVoice class
-//        MyVoice myVoice = MyVoice.getInstance();
+//         MyVoice myVoice = MyVoice.getInstance();
 
         // It calls out the presentation message of the program
          //myVoice.speak("Welcome to the central application");
 
         // It instantiates the interface
-         centralView = new CentralView(this);
+        centralView = new CentralView(this);
         centralView.display();
     } // end display
 
@@ -68,32 +67,75 @@ String depthCentralPoint = "No information available";
     } // end of speak
 
 
-    public void loadImage(String imagePath) throws  ModelException, TranslateException, IOException{
-try {
-    Path imageFile = Paths.get(imagePath.trim() );
+    /**
+     * Method that calls all the required methods and classes to generate all the possible details that the program works with
+     * It receives the String with the path to the picture to be processed
+     * It is public to allow the access outside the class
+     * It throws the required exceptions in the case an error related to these occurs
+     *
+     * @param imagePath
+     * @throws ModelException
+     * @throws TranslateException
+     * @throws IOException
+     */
 
-    Image img = ImageFactory.getInstance().fromFile(imageFile);
-     description = getDescription(img);
-    System.out.println("Secaiv\n" + description);
-    overlapping = OverlappingAlgorithm.getOverlap(listOfObjects);
-    System.out.println("\n" + description);
+    public void loadImage(String imagePath) throws ModelException, TranslateException, IOException {
+        listOfObjects.clear();
+        // try statement that handles the possible exceptions
+        try {
 
-    depthOverlap = OverlappingAlgorithm.calculateDepth(listOfObjects);
-    depthCentralPoint = CentralPointsAlgorithm.calculateDepth(listOfObjects);
+            // it declares the variable that contains the path to the picture
+            Path imageFile = Paths.get(imagePath.trim());
 
-displayMessage(Choice.DESCRIPTION);
-centralView.buttonsPanel.setVisible(true);
-} catch (IOException ioe)
-{System.out.println((ioe));}
+            // It declares the Image object
+            Image img = ImageFactory.getInstance().fromFile(imageFile);
+            // It calls the method that generates the description
+            // It stores the information in the description variable
+            description = getDescription(img);
+
+
+            // It calls the method that generates the overlapping
+            // It stores the information in the overlapping variable
+            overlapping = OverlappingAlgorithm.getOverlap(listOfObjects);
+
+            // It calls the method that generates the depth using the OverlappingAlgorithm class
+            // It stores the information in the depthOverlap variable
+            depthOverlap = OverlappingAlgorithm.calculateDepth(listOfObjects);
+
+            // It calls the method that generates the depth using the CentralpointsAlgorithm
+            // It stores the information in the depthCentralPoint variable
+            depthCentralPoint = CentralPointAlgorithm.calculateDepth(listOfObjects);
+            // It calls the method that generates the depth using the BottomAlgorithm
+            // It stores the information in the depthBottom variable
+            depthBottom = BottomAlgorithm.calculateDepth(listOfObjects);
+
+            // By default the description variable is shown
+            displayMessage(Choice.DESCRIPTION);
+
+            // the panel with the rest of the information buttons is displayed
+            centralView.buttonsPanel.setVisible(true);
+
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(null, ioe, "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
     }  // end load image
 
-    public void displayMessage(Choice option){
 
-        switch (option){
+    /**
+     * Method that handles the selection of the user of the information picked in the interface
+     * It recieves a valid option of the Choice enum and displays the corresponding message
+     * It is public to allow the access outside the class
+     *
+     * @param option
+     */
+
+    public void displayMessage(Choice option) {
+
+        switch (option) {
             case DESCRIPTION:
-                JOptionPane.showMessageDialog(null, description,"Description", JOptionPane.INFORMATION_MESSAGE);
-            break;
+                JOptionPane.showMessageDialog(null, description, "Description", JOptionPane.INFORMATION_MESSAGE);
+                break;
 
             case OVERLAPPING:
                 JOptionPane.showMessageDialog(null, overlapping, "Overlapping", JOptionPane.INFORMATION_MESSAGE);
@@ -104,18 +146,32 @@ centralView.buttonsPanel.setVisible(true);
                 break;
 
             case DEPTHCENTRALPOINT:
-                    JOptionPane.showMessageDialog(null, depthCentralPoint, "Depth by Central Point", JOptionPane.INFORMATION_MESSAGE);
-                    break;
+                JOptionPane.showMessageDialog(null, depthCentralPoint, "Depth by Central Point", JOptionPane.INFORMATION_MESSAGE);
+                break;
 
             case DEPTHBOTTOM:
-                    JOptionPane.showMessageDialog(null, DepthBottomAlgorithm.calculateDepth(listOfObjects), "Depth by the bottom", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, depthBottom, "Depth by bottom", JOptionPane.INFORMATION_MESSAGE);
 
         } // end switch
 
     } // end display message
 
+    /**
+     * Method that calls the method that processes the picture and generate the detection
+     * Also, it calls the corresponding methods to generate the description of the picture with the location and size of each object
+     * It receives the image object to be process
+     * It returns the String with the description
+     * It is private to avoid accessing outside the class
+     * It throws the required exceptions in the case an error related to these occurs
+     *
+     * @param img
+     * @return
+     * @throws IOException
+     * @throws ModelException
+     * @throws TranslateException
+     */
 
-    private String getDescription(Image img) throws IOException, ModelException, TranslateException{
+    private String getDescription(Image img) throws IOException, ModelException, TranslateException {
         // the height and width of the image in pixels
         int height = img.getHeight();
         int width = img.getWidth();
@@ -137,7 +193,7 @@ centralView.buttonsPanel.setVisible(true);
 
         // loop that iterates the ArrayList and
         // displays the description of each object
-         String description = "";
+        String description = "";
         for (ObjectDetected od : listOfObjects)
             description += "\nName: " + od.getName() + "\nDescription: " + od.getDescription();
 
@@ -145,14 +201,11 @@ centralView.buttonsPanel.setVisible(true);
     } // end get description
 
 
-
-
-
     /**
      * method that receives the result of the prediction in String format
      * it converts String into a JSON object and extracts the values of each field
      * It returns an ObjectDetected with all the data inserted
-     * It is private because non external classes can access it
+     * It is private to avoid accessing outside the class
      *
      * @param result
      * @return
@@ -192,8 +245,7 @@ centralView.buttonsPanel.setVisible(true);
      * method that receives the ObjectDetected where the data is stored
      * and the bounds values in String format to convert it into JSON and extract the data
      * It returns the ObjectDetected object with all the data
-     * It is private because non external classes can access it
-     *
+     * It is private to avoid accessing outside the class
      * @param od
      * @param bounds
      * @return
@@ -237,7 +289,7 @@ centralView.buttonsPanel.setVisible(true);
      * the values are defined as decimals values. Therefore they must be converted into integer values to be able to manipulate them
      * It receives the value as a decimal
      * It returns the value in integer format
-     * It is private because non external classes can access it
+     * It is private to avoid accessing outside the class
      *
      * @param value
      * @return
@@ -246,8 +298,6 @@ centralView.buttonsPanel.setVisible(true);
     private static int fetchDecimals(String value) {
         return Integer.parseInt(value.substring(value.indexOf(".") + 1));
     } // end fetch decimals
-
-
 
 
 } // end of class
